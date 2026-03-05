@@ -27,7 +27,7 @@ export default async function Dashboard() {
 
 async function fetchProducts() {
     try {
-        const res = await fetch('http://localhost:3000/api/products', { cache: 'no-store' });
+        const res = await fetch('/apis/products', { cache: 'no-store' });
         if (!res.ok) throw new Error('Failed to fetch');
         return await res.json();
     } catch (error) {
