@@ -1,11 +1,24 @@
-export default async function Dashboard() {
-    const products = await fetchProducts();
+"use client";
+import { useState } from "react";
+import { useEffect } from "react";
+
+export default function Dashboard() {
+    const [products, setProducts] = useState([]);
+    useEffect(() => {
+        async function fetchData() {
+            const data = await fetchProducts();
+            setProducts(data);
+        }
+
+        fetchData();
+
+    }, []);
 
     return (
         <div style={styles.container}>
             <h1 style={styles.title}>Welcome to your Dashboard!</h1>
             <p style={styles.text}>This is a protected page. Only logged in users can see this.</p>
-            
+
             <h2 style={styles.subtitle}>Products</h2>
             {products.length === 0 ? (
                 <p style={styles.noData}>No products available.</p>
@@ -27,11 +40,17 @@ export default async function Dashboard() {
 
 async function fetchProducts() {
     try {
-        const res = await fetch('/apis/products', { cache: 'no-store' });
-        if (!res.ok) throw new Error('Failed to fetch');
-        return await res.json();
+        const response = await fetch("/api/products",
+            {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+        const products = await response.json();
+        return products;
     } catch (error) {
-        console.error(error);
+        console.error('Failed to fetch products:', error);
         return [];
     }
 }
