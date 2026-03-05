@@ -1,14 +1,14 @@
-"use client";
+    "use client";
 import { useState } from "react";
 
-export default function Signup() {
+export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   async function handleSubmit(e) {
     e.preventDefault();
 
-    await fetch("/api/signup", {
+    const response = await fetch("/api/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -16,13 +16,18 @@ export default function Signup() {
       body: JSON.stringify({ email, password })
     });
 
-    alert("User created 🎉");
+    if (response.ok) {
+      alert("User logged in 🎉");
+      window.location.href = "/dashboard";
+    } else {
+      alert("Invalid credentials");
+    }
   }
 
   return (
     <div style={styles.container}>
       <form onSubmit={handleSubmit} style={styles.card}>
-        <h2 style={styles.title}>Create Account</h2>
+        <h1 style={styles.title}>Login</h1>
 
         <input
           type="email"
@@ -43,7 +48,7 @@ export default function Signup() {
         />
 
         <button type="submit" style={styles.button}>
-          Sign Up
+          Login
         </button>
       </form>
     </div>
