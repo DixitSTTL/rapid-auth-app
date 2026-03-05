@@ -16,7 +16,7 @@ export default async function Dashboard() {
                             {product.image && <img src={product.image} alt={product.name} style={styles.productImage} />}
                             <h3 style={styles.productName}>{product.name}</h3>
                             <p style={styles.productPrice}>${product.price}</p>
-                            {product.description && <p st       yle={styles.productDescription}>{product.description}</p>}
+                            {product.description && <p style={styles.productDescription}>{product.description}</p>}
                         </div>
                     ))}
                 </div>
