@@ -1,36 +1,39 @@
 "use client";
 import { useState } from "react";
 import { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
-export default function Dashboard() {
-    const router = useRouter();
-    const [categories, setCategories] = useState([]);
+export default function Products() {
+    const searchParams = useSearchParams();
+    const categoryKey = searchParams.get("category");
+    const [products, setProducts] = useState([]);
+
     useEffect(() => {
         async function fetchData() {
-            const data = await fetchCategories();
-            setCategories(data);
+            if (!categoryKey) return;
+            const data = await fetchProducts(categoryKey);
+            setProducts(data);
         }
 
         fetchData();
 
-    }, []);
+    }, [categoryKey]);
 
     return (
         <div style={styles.container}>
-            <h1 style={styles.title}>Welcome to your Dashboard!</h1>
-            <p style={styles.text}>This is a protected page. Only logged in users can see this.</p>
+           
 
-            <h2 style={styles.subtitle}>Categories</h2>
-            {categories.length === 0 ? (
-                <p style={styles.noData}>No Categories available.</p>
+            <h2 style={styles.subtitle}>Products</h2>
+            {products.length === 0 ? (
+                <p style={styles.noData}>No products available for category: {categoryKey}</p>
             ) : (
-                <div style={styles.categoryRow}>
-                    {categories.map(category => (
-                        <div key={category._id} style={styles.categoryCard} onClick={() => router.push(`/products?category=${category.key}`)} >
-                            {category.image && <img src={category.image} alt={category.name} style={styles.categoryImage} />}
-                            <h3 style={styles.categoryName}>{category.name}</h3>
-                            {category.description && <p style={styles.categoryDescription}>{category.description}</p>}
+                <div style={styles.productRow}>
+                    {products.map(product => (
+                        <div key={product._id} style={styles.productCard}>
+                            {product.image && <img src={product.image} alt={product.name} style={styles.productImage} />}
+                            <h3 style={styles.productName}>{product.name}</h3>
+                            <p style={styles.productPrice}>${product.price}</p>
+                            {product.description && <p style={styles.productDescription}>{product.description}</p>}
                         </div>
                     ))}
                 </div>
@@ -39,19 +42,14 @@ export default function Dashboard() {
     );
 }
 
-async function fetchCategories() {
+async function fetchProducts(categoryKey) {
     try {
-        const response = await fetch("/api/categories",
-            {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            });
-        const categories = await response.json();
-        return categories;
+        const response = await fetch(`/api/products?category=${encodeURIComponent(categoryKey)}`);
+        if (!response.ok) throw new Error('Failed to fetch products');
+        const products = await response.json();
+        return products;
     } catch (error) {
-        console.error('Failed to fetch categories:', error);
+        console.error('Failed to fetch products:', error);
         return [];
     }
 }
@@ -81,7 +79,7 @@ const styles = {
         fontSize: "24px",
         marginBottom: "20px"
     },
-    categoryRow: {
+    productRow: {
         display: "flex",
         flexWrap: "wrap",
         gap: "20px",
@@ -89,7 +87,7 @@ const styles = {
         width: "100%",
         maxWidth: "1200px"
     },
-    categoryCard: {
+    productCard: {
         backgroundColor: "rgba(255, 255, 255, 0.1)",
         padding: "20px",
         borderRadius: "12px",
@@ -99,23 +97,23 @@ const styles = {
         textAlign: "center",
         transition: "transform 0.2s"
     },
-    categoryImage: {
+    productImage: {
         width: "100%",
         height: "150px",
         objectFit: "cover",
         borderRadius: "8px",
         marginBottom: "10px"
     },
-    categoryName: {
+    productName: {
         fontSize: "20px",
         marginBottom: "10px"
     },
-    categoryPrice: {
+    productPrice: {
         fontSize: "18px",
         fontWeight: "bold",
         marginBottom: "10px"
     },
-    categoryDescription: {
+    productDescription: {
         fontSize: "14px",
         color: "rgba(255, 255, 255, 0.8)"
     },
