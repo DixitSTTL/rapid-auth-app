@@ -2,24 +2,27 @@ import { connectDB } from "../../../lib/mongodb";
 import User from "../../../models/User";
 import bcrypt from "bcryptjs";
 import { NextResponse } from "next/server";
-import mongoose from "mongoose";
 
 export async function POST(req) {
-
     try {
-        const { email, password } = await req.json();
+        const formData = await req.formData();
+        const email = formData.get("email");
+        const password = formData.get("password");
+        const name = formData.get("name");
+        const imageFile = formData.get("profileImage");
 
-        console.log("Received signup request:", { email, password });
+        console.log("Received signup request:", { email, name });
         await connectDB();
 
         const hashed = await bcrypt.hash(password, 10);
 
-        const newUser = await User.create({
+        await User.create({
             email,
-            password: hashed
+            password: hashed,
+            name,
+            profileImage: imageFile
         });
-        console.log("Collection:", newUser.collection.name);
-        console.log("Connected DB:", mongoose.connection.name);
+
         return NextResponse.json({ message: "User created" });
 
     } catch (error) {

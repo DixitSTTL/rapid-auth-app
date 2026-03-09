@@ -1,4 +1,5 @@
     "use client";
+import Link from "next/link";
 import { useState } from "react";
 
 export default function Login() {
@@ -17,6 +18,7 @@ export default function Login() {
     });
 
     if (response.ok) {
+      localStorage.setItem("userEmail", email);
       alert("User logged in 🎉");
       window.location.href = "/dashboard";
     } else {
@@ -50,6 +52,14 @@ export default function Login() {
         <button type="submit" style={styles.button}>
           Login
         </button>
+
+         <li>
+          <text style={{ textAlign: "center", marginTop: "10px", color: "gray", }}>Create an account </text>
+          <Link href="/signup" style={{ marginTop: "10px", textAlign: "center", color: "#16213e", textDecoration: "none" }}>
+            Sign up
+          </Link>
+        </li>
+
       </form>
     </div>
   );
@@ -61,7 +71,7 @@ const styles = {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    background: "linear-gradient(135deg, #667eea, #764ba2)"
+    background: "linear-gradient(135deg, #1a1a2e, #16213e, #0f3460)"
   },
   card: {
     background: "#ffffff",
@@ -90,7 +100,7 @@ const styles = {
     padding: "12px",
     borderRadius: "8px",
     border: "none",
-    backgroundColor: "#667eea",
+    backgroundColor: "#1a1a2e",
     color: "#fff",
     fontWeight: "bold",
     cursor: "pointer",

@@ -42,45 +42,6 @@ export default function ProductsClient() {
     );
 }
 
-// export default function Products() {
-//     const searchParams = useSearchParams();
-//     const categoryKey = searchParams.get("category");
-//     const [products, setProducts] = useState([]);
-
-//     useEffect(() => {
-//         async function fetchData() {
-//             if (!categoryKey) return;
-//             const data = await fetchProducts(categoryKey);
-//             setProducts(data);
-//         }
-
-//         fetchData();
-
-//     }, [categoryKey]);
-
-//     return (
-//         <div style={styles.container}>
-           
-
-//             <h2 style={styles.subtitle}>Products</h2>
-//             {products.length === 0 ? (
-//                 <p style={styles.noData}>No products available for category: {categoryKey}</p>
-//             ) : (
-//                 <div style={styles.productRow}>
-//                     {products.map(product => (
-//                         <div key={product._id} style={styles.productCard}>
-//                             {product.image && <img src={product.image} alt={product.name} style={styles.productImage} />}
-//                             <h3 style={styles.productName}>{product.name}</h3>
-//                             <p style={styles.productPrice}>${product.price}</p>
-//                             {product.description && <p style={styles.productDescription}>{product.description}</p>}
-//                         </div>
-//                     ))}
-//                 </div>
-//             )}
-//         </div>
-//     );
-// }
-
 async function fetchProducts(categoryKey) {
     try {
         const response = await fetch(`/api/products?category=${encodeURIComponent(categoryKey)}`);
@@ -100,7 +61,7 @@ const styles = {
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        background: "linear-gradient(135deg, #667eea, #764ba2)",
+        background: "linear-gradient(135deg, #1a1a2e, #16213e, #0f3460)",
         padding: "20px"
     },
     title: {

@@ -16,10 +16,26 @@ export default function Dashboard() {
 
     }, []);
 
+    async function handleLogout() {
+        try {
+            await fetch("/api/logout", {
+                method: "POST"
+            });
+            localStorage.removeItem("userEmail");
+            router.push("/login");
+        } catch (error) {
+            console.error("Logout error:", error);
+        }
+    }
+
     return (
         <div style={styles.container}>
             <h1 style={styles.title}>Welcome to your Dashboard!</h1>
             <p style={styles.text}>This is a protected page. Only logged in users can see this.</p>
+            <div style={styles.buttonContainer}>
+                <button onClick={() => router.push('/profile')} style={styles.button}>Go to Profile</button>
+                <button onClick={handleLogout} style={{...styles.button, backgroundColor: '#dc3545'}}>Logout</button>
+            </div>
 
             <h2 style={styles.subtitle}>Categories</h2>
             {categories.length === 0 ? (
@@ -63,7 +79,7 @@ const styles = {
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        background: "linear-gradient(135deg, #667eea, #764ba2)",
+        background: "linear-gradient(135deg, #1a1a2e, #16213e, #0f3460)",
         padding: "20px"
     },
     title: {
@@ -123,5 +139,21 @@ const styles = {
         color: "#fff",
         fontSize: "16px",
         fontStyle: "italic"
+    },
+    buttonContainer: {
+        display: "flex",
+        gap: "10px",
+        marginBottom: "40px",
+        justifyContent: "center"
+    },
+    button: {
+        backgroundColor: "#fff",
+        color: "#1a1a2e",
+        border: "none",
+        padding: "10px 20px",
+        borderRadius: "8px",
+        fontSize: "16px",
+        cursor: "pointer",
+        marginBottom: "20px"
     }
 }
