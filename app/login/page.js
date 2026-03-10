@@ -142,7 +142,7 @@ export default function Login() {
           </button>
 
           <div style={styles.signupLink}>
-            <text style={styles.signupText}>Don't have an account?</text>
+            <text style={styles.signupText}>Don&apos;t have an account?</text>
             <Link href="/signup" style={styles.signupButton}>
               Sign up here
             </Link>
