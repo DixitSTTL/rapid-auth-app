@@ -66,6 +66,7 @@ export default function Login() {
         // Success animation
         setTimeout(() => {
           router.push("/dashboard");
+          router.refresh(); // important
         }, 500);
       } else {
         alert("Invalid credentials");
