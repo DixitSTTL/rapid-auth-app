@@ -11,6 +11,22 @@ export default function Login() {
   const router = useRouter();
 
   useEffect(() => {
+    // Check if user is already logged in
+    const checkAuth = () => {
+      const token = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('token='))
+        ?.split('=')[1];
+      
+      if (token) {
+        router.push("/dashboard");
+      }
+    };
+
+    checkAuth();
+  }, [router]);
+
+  useEffect(() => {
     // Inject CSS animations
     const styleSheet = document.createElement("style");
     styleSheet.textContent = `

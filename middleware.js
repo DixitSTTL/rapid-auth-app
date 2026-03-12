@@ -1,22 +1,36 @@
 import { NextResponse } from "next/server";
+import { jwtVerify } from "jose";
 
-export function middleware(request) {
+const publicRoutes = ["/", "/login", "/signup"];
+const authRoutes = ["/login", "/signup"];
+
+const secret = new TextEncoder().encode(process.env.JWT_SECRET);
+
+export async function middleware(request) {
   const token = request.cookies.get("token")?.value;
   const { pathname } = request.nextUrl;
 
-  const publicRoutes = ["/", "/login", "/signup"];
-
-  // Allow public pages
+  // Allow public routes
   if (publicRoutes.includes(pathname)) {
+    if (token && authRoutes.includes(pathname)) {
+      return NextResponse.redirect(new URL("/dashboard", request.url));
+    }
     return NextResponse.next();
   }
 
-  // Protect private pages
+  // Protect private routes
   if (!token) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  return NextResponse.next();
+  try {
+    await jwtVerify(token, secret);
+    return NextResponse.next();
+  } catch {
+    const response = NextResponse.redirect(new URL("/login", request.url));
+    response.cookies.delete("token");
+    return response;
+  }
 }
 
 export const config = {
