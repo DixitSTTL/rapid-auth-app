@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { jwtVerify } from "jose";
 
-const publicRoutes = ["/", "/login", "/signup"];
+const publicRoutes = ["/", "/login", "/signup", "/websocket"]; // Add your public routes here
 const authRoutes = ["/login", "/signup"];
 
 const secret = new TextEncoder().encode(process.env.JWT_SECRET);
